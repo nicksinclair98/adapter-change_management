@@ -195,31 +195,6 @@ class ServiceNowAdapter extends EventEmitter {
      * get() takes a callback function.
      */
     this.connector.get(callback);
-    
-    // var data = this.connector.get(callback);
-
-    // if (data && data.body) {
-    //   var extractedBody = JSON.stringify(data.body);
-    //   var resultArray = extractedBody.result;
-
-    //   var validProps = [
-    //     'number', 
-    //     'active', 
-    //     'priority', 
-    //     'description', 
-    //     'work_Start', 
-    //     'work_end',
-    //     'sys_id'
-    //     ];
-
-    //   for (var result of resultArray) {
-    //     Object.keys(result).forEach((prop) => {
-    //       if (!validProps.includes(prop)) {
-    //         delete result[prop];
-    //       }
-    //     })
-    //   }
-    // }
   }
 
   /**
