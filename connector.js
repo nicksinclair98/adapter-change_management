@@ -94,13 +94,13 @@ class ServiceNowConnector {
    */
   processRequestResults(error, response, body, callback) {
     if (error) {
-        console.error('Error present.');
+        log.error('Error present.');
         return error;
     } else if (this.isHibernating(response)) {
-        console.log('Hibernating instance');
+        log.error('Hibernating instance');
         return error;
     } else if (!validResponseRegex.test(response.statusCode)) {
-        console.error('Bad response code.');
+        log.error('Bad response code.');
         return error;
     }
     return callback(response, error);
