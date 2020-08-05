@@ -135,7 +135,7 @@ class ServiceNowAdapter extends EventEmitter {
         this.emitOnline();
 
         if (callback) {
-          callback(result);
+          callback(result, error);
         }
       }
     });
