@@ -214,7 +214,7 @@ class ServiceNowConnector {
                 delete result.risk_impact_analysis;
             });
 
-            callbackData = results[0];
+            callbackData = results;
         }
     }
     
@@ -296,7 +296,7 @@ class ServiceNowConnector {
   get(callback) {
     let getCallOptions = { ...this.options };
     getCallOptions.method = 'GET';
-    getCallOptions.query = 'sysparm_limit=1';
+    //getCallOptions.query = 'sysparm_limit=1';
     this.sendRequest(getCallOptions, (results, error) => callback(results, error));
   }
 
