@@ -194,117 +194,38 @@ class ServiceNowAdapter extends EventEmitter {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-    let data = this.connector.get(callback);
+    // this.connector.get(callback);
 
-    // if (data) {
-    //     const jsonBody = JSON.parse(data.body);
-    //     const results = jsonBody.result;
+    try {
+      return this.connector.get((returnData, returnError) => { 
+        if (returnError) {
+          return callback(null, returnError);
+        }
 
-    //     results.forEach(result => {
-    //         result.change_ticket_number = result.number;
-    //         result.change_ticket_key = result.sys_id;
-            
-    //         delete result.number;
-    //         delete result.sys_id;
-    //         delete result.parent;
-    //         delete result.reason;
-    //         delete result.watch_list;
-    //         delete result.upon_reject;
-    //         delete result.sys_updated_on;
-    //         delete result.type;
-    //         delete result.approval_history;
-    //         delete result.test_plan;
-    //         delete result.cab_delegate;
-    //         delete result.requested_by_date;
-    //         delete result.state;
-    //         delete result.sys_created_by;
-    //         delete result.knowledge;
-    //         delete result.order;
-    //         delete result.phase;
-    //         delete result.cmdb_ci;
-    //         delete result.delivery_plan;
-    //         delete result.contract;
-    //         delete result.impact;
-    //         delete result.work_notes_list;
-    //         delete result.sys_domain_path;
-    //         delete result.cab_recommendation;
-    //         delete result.production_system;
-    //         delete result.review_date;
-    //         delete result.business_duration;
-    //         delete result.group_list;
-    //         delete result.requested_by;
-    //         delete result.change_plan;
-    //         delete result.approval_set;
-    //         delete result.implementation_plan;
-    //         delete result.approval_history;
-    //         delete result.test_plan;
-    //         delete result.correlation_display;
-    //         delete result.delivery_task;
-    //         delete result.additional_assignee_list;
-    //         delete result.outside_maintenance_schedule;
-    //         delete result.end_date;
-    //         delete result.short_description;
-    //         delete result.std_change_producer_version;
-    //         delete result.service_offering;
-    //         delete result.sys_class_name;
-    //         delete result.closed_by;
-    //         delete result.follow_up;
-    //         delete result.reassignment_count;
-    //         delete result.review_status;
-    //         delete result.assigned_to;
-    //         delete result.start_date;
-    //         delete result.sla_due;
-    //         delete result.comments_and_work_notes;
-    //         delete result.escalation;
-    //         delete result.upon_approval;
-    //         delete result.correlation_id;
-    //         delete result.made_sla;
-    //         delete result.backout_plan;
-    //         delete result.conflict_status;
-    //         delete result.sys_updated_by;
-    //         delete result.opened_by;
-    //         delete result.user_input;
-    //         delete result.sys_created_on;
-    //         delete result.on_hold_task;
-    //         delete result.sys_domain;
-    //         delete result.closed_at;
-    //         delete result.review_comments;
-    //         delete result.business_service;
-    //         delete result.time_worked;
-    //         delete result.expected_start;
-    //         delete result.opened_at;
-    //         delete result.phase_state;
-    //         delete result.cab_date;
-    //         delete result.work_notes;
-    //         delete result.close_code;
-    //         delete result.assignment_group;
-    //         delete result.on_hold_reason;
-    //         delete result.calendar_duration;
-    //         delete result.close_notes;
-    //         delete result.contact_type;
-    //         delete result.cab_required;
-    //         delete result.urgency;
-    //         delete result.scope;
-    //         delete result.company;
-    //         delete result.justification;
-    //         delete result.activity_due;
-    //         delete result.comments;
-    //         delete result.approval;
-    //         delete result.due_date;
-    //         delete result.sys_mod_count;
-    //         delete result.on_hold;
-    //         delete result.sys_tags;
-    //         delete result.conflict_last_run;
-    //         delete result.unauthorized;
-    //         delete result.location;
-    //         delete result.risk;
-    //         delete result.category;
-    //         delete result.risk_impact_analysis;
-    //     });
-    //     var documents = results;
-    // }
+        const ticketList = [];
 
-    // return documents;
+        if(returnData.body) {
+          const jsonBody = JSON.parse(returnData.body);
+          const results = jsonBody.result;
+          results.forEach(result => {
+            let ticket = {};
+            ticket.change_ticket_number = result.number;
+            ticket.active = result.active;
+            ticket.priority = result.priority;
+            ticket.description = result.description;
+            ticket.work_start = result.work_start;
+            ticket.work_end = result.work_end;
+            ticket.change_ticket_key = result.sys_id;
+            ticketList.push(ticket);
+          });
+        }
+
+        return callback(ticketList, null);
+      });
+    } catch(error) {
+      log.error('ServiceNow: Failed to get record.');
+      return callback(null, error);
+    }
   }
 
   /**
@@ -323,7 +244,33 @@ class ServiceNowAdapter extends EventEmitter {
      * Note how the object was instantiated in the constructor().
      * post() takes a callback function.
      */
-    this.connector.post(callback);
+    // this.connector.post(callback);
+
+    try {
+      return this.connector.post((returnData, returnError) => { 
+        if (returnError) {
+          return callback(null, returnError);
+        }
+
+        const ticket = {};
+        if(returnData.body) {
+          const jsonBody = JSON.parse(returnData.body);
+          const result = jsonBody.result;
+          ticket.change_ticket_number = result.number;
+          ticket.active = result.active;
+          ticket.priority = result.priority;
+          ticket.description = result.description;
+          ticket.work_start = result.work_start;
+          ticket.work_end = result.work_end;
+          ticket.change_ticket_key = result.sys_id;
+        }
+
+        return callback(ticket, null);
+      });
+    } catch(error) {
+      log.error('ServiceNow: Failed to post record.');
+      return callback(null, error);
+    } 
   }
 }
 
